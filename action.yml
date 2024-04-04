@@ -1,0 +1,22 @@
+name: Coolify Application Redeploy
+author: ManicMade.com
+description: Action to contact Coolify API and request a redeployment of your application
+
+inputs:
+  coolifyUrl:
+    description: 'Coolify URL'
+    required: true
+  coolifyToken:
+    description: 'Coolify Access Token'
+    required: true
+  coolifyAppId:
+    description: 'Coolify App ID/UUID'
+    required: true
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
+
+branding:
+  icon: 'coffee'
+  color: 'purple'
