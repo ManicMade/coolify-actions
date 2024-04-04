@@ -6,6 +6,11 @@ import axios, { AxiosError } from 'axios';
 
 async function run(): Promise<void> {
   try {
+    if (process.env.NODE_ENV !== 'production') {
+      console.log("YEAH");
+      require('dotenv').config();
+    }
+
     const url = core.getInput(Inputs.CoolifyUrl, {required: false});
     const applicationId = core.getInput(Inputs.CoolifyAppId, {required: false});
     const token = core.getInput(Inputs.CoolifyToken, {required: false});
