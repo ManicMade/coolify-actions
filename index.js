@@ -20,13 +20,13 @@ if (coolifyUrl.substring(coolifyUrl.length - 1) === "/") {
   coolifyUrl = coolifyUrl.substring(0, coolifyUrl.length - 1)
 }
 
-console.log(coolifyUrl, coolifyUrl, coolifyAppId)
-
 // hide your token from the logs in github actions
 core.setSecret(coolifyToken)
 
 const url = `${coolifyUrl}/api/v1/deploy?uuid=${coolifyAppId}`
 let data = '';
+
+console.log(`Contacting Coolify @ ${url} ..`)
 
 const req = client.request(url, {
     method: "GET",
@@ -41,14 +41,30 @@ const req = client.request(url, {
 
     res.on('data', (chunk) => {
         data += chunk;
+
+        console.log('Receiving response ..')
     }).on('end', () => {    
-        console.log("Received response", res.statusCode, data)
+        console.log(`Received response code ${res.statusCode}.`)
+        // console.log("Received response:", res.statusCode, data)
 
         const jsonData = JSON.parse(data)
 
-        if (Array.isArray(jsonData)) {
-            console.log(`Successfully redeployed!`)
-            console.log("Got data back!", jsonData)
+        if (typeof jsonData == 'object') {
+            let msg = false
+
+            if (Array.isArray(jsonData.deployments)) {
+                const deployment = jsonData.deployments[0]
+                
+                msg = deployment ? deployment.message : false       
+
+                console.log(`Coolify said: ${msg}`)
+            }
+
+
+            if (!msg) {
+                console.log(`Coolify's response was not understood.`)
+                console.log(jsonData)
+            }            
         }
     }).on("error", (error) => {
         core.setFailed('Error - ' + error.message)

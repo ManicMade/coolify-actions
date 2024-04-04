@@ -16,11 +16,6 @@ You can try it out before installing it: [Live demo](https://demo.coolify.io/)
 | coolify-app-id    |    <ul><li>- [x] </li></ol>   | Application id                                                                    |
 | coolify-token     |    <ul><li>- [x] </li></ol>   | Bearer token base                                                                 |
 
-## Outputs
-
-### `build-id`
-
-The id of deployment.
 
 ## How To Use
 
@@ -37,12 +32,13 @@ on: [pull_request]
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    name: Deploy to Coolify
+    runs-on: ubuntu-20.04
+    environment: manicmade.com
     steps:
-      - uses: actions/checkout@v2
-      - uses: themarkwill/coolify-actions@v0.0.3 #deploy
+      - uses: manicmade/coolify-actions@v0.0.1
         with:
-          coolify-url: ${{ secrets.COOLIFY_URL }} # Required
-          coolify-app-id: ${{ secrets.COOLIFY_APP_ID }}  #Required
-          coolify-token: ${{ secrets.COOLIFY_TOKEN }} #Required 
+          coolify-url: ${{ secrets.COOLIFY_URL }}
+          coolify-app-id: ${{ secrets.COOLIFY_APP_ID }}
+          coolify-token: ${{ secrets.COOLIFY_TOKEN }}
 ```
